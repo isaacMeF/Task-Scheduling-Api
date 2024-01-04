@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, UseGuards } from '@nestjs/common';
 import { UserService } from '../services/user.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { User } from '../entities/user.entity';
-import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { LoginDto } from '../dto/login/login.dto';
+import { UserGuard } from '../guards/user.guard';
 
 @Controller('/api/user')
 @ApiTags('user')
@@ -26,13 +27,11 @@ export class UserController {
   }
 
 
-
-  @Get()
-  findAll() {
-    return this.userService.findAll();
-  }
-
-  @Get(':id')
+  @ApiBearerAuth()
+  @UseGuards(UserGuard)
+  @Get('/:id')
+  @ApiResponse({ status: HttpStatus.OK, type: User })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   findOne(@Param('id') id: string) {
     return this.userService.findOne(+id);
   }
