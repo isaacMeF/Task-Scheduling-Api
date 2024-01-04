@@ -16,7 +16,6 @@ export class UserGuard implements CanActivate {
       const payload = this.jwtService.verify(token, { secret: process.env.USER_SECRET_KEY });
       request['user'] = payload;
     } catch(e) {
-      console.log(e);
       throw new UnauthorizedException();
     }
     return true;
