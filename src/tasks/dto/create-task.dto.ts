@@ -75,13 +75,13 @@ export class CreateTaskDto {
   @ApiProperty({
     description: 'The task reminder frequency',
     example: 'DAILY',
-    enum: ['DAILY', 'WEEKLY', 'MONTHLY'],
+    enum: ['DAILY', 'WEEKLY', 'MONTHLY', 'MINUTELY'],
     default: null,
     required: false,
   })
   @IsOptional()
   @IsString()
-  @IsEnum(['DAILY', 'WEEKLY', 'MONTHLY'])
+  @IsEnum(['DAILY', 'WEEKLY', 'MONTHLY', 'MINUTELY'])
   reminderFrequency?: string;
 }
 

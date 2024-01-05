@@ -119,4 +119,8 @@ export class UserService {
   async removeTask(userId: Types.ObjectId, taskId: Types.ObjectId): Promise<User> {
     return await this.userModel.findByIdAndUpdate(userId, { $pull: { tasks: taskId } });
   }
+
+  async findOne(id: Types.ObjectId): Promise<User> {
+    return this.userModel.findById(id);
+  }
 }

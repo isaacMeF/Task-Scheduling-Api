@@ -7,6 +7,7 @@ import { AllExceptionsFilter } from './all-exceptions/all-exceptions.filter';
 import { TasksModule } from './tasks/tasks.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
     imports: [
@@ -34,6 +35,7 @@ import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
           },
         },
       }),
+      ScheduleModule.forRoot(),
       
       UserModule,
       TasksModule

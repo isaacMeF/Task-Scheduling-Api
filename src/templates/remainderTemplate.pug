@@ -1,0 +1,34 @@
+html
+  head
+    title Recordatorio de Tarea
+    style.
+      body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        margin: 20px;
+      }
+      h1 {
+        color: #2c3e50;
+        text-align: center;
+      }
+      p {
+        margin-bottom: 10px;
+      }
+      .task-info {
+        background-color: #ecf0f1;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin: 0 auto;
+        max-width: 400px;
+      }
+  body
+    .task-info
+      h1 Recordatorio de Tarea
+      p La tarea "#{taskName}" está programada.
+      p Descripción de la tarea: "#{taskDescription}"
+      p Fecha de inicio: #{taskStartDate}
+      p Fecha de fin: #{taskEndDate}
+      p Prioridad: #{taskPriority}
+      p ¡No olvides completarla a tiempo!

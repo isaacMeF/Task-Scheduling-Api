@@ -64,10 +64,10 @@ export class Task {
   @ApiProperty({
     description: 'The task reminder frequency',
     example: 'DAILY',
-    enum: ['DAILY', 'WEEKLY', 'MONTHLY'],
+    enum: ['DAILY', 'WEEKLY', 'MONTHLY', 'MINUTELY'],
     default: null
   })
-  @Prop({ type: String, default: null, enum: ['DAILY', 'WEEKLY', 'MONTHLY'] })
+  @Prop({ type: String, default: null, enum: ['DAILY', 'WEEKLY', 'MONTHLY', 'MINUTELY'] })
   reminderFrequency: string;
 
 }
