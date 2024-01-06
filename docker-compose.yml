@@ -10,3 +10,16 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: test-area-psw
+
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - 6379:6379
+    environment:
+      REDIS_PASSWORD: test-area-psw
+
+#REMEMBER TO CHANGE THE PASSWORDS IN THE ENVIRONMENT VARIABLES 
+
+
+
