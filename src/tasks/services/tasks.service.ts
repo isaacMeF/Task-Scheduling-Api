@@ -9,6 +9,8 @@ import { Document } from 'mongoose';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { CronJob } from 'cron';
 import { MailerService } from '@nestjs-modules/mailer';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class TasksService {
@@ -26,10 +28,17 @@ export class TasksService {
     @Inject(MailerService)
     private mailerService: MailerService,
 
+    @Inject(CACHE_MANAGER)
+    private cacheManager: Cache,
+
   ) {
     taskModel.find().then(tasks => {
       tasks.forEach(task => {
         if(task.haveReminder && task.status !== 'DONE'){
+          if(new Date() > task.endDate ){
+            task.status = 'DONE';
+            task.save();
+          }
           const cronName = `task-${task.user}-${task._id}`;
           this.createCronJob(cronName, task.reminderFrequency, task.startDate, task.endDate, task);
         }
@@ -53,11 +62,21 @@ export class TasksService {
     }
     await this.userService.addTask(userId, task._id);
 
+    await this.cacheManager.del(`tasks-${userId}`);
+
     return await task.save();
   }
 
   async findAll(userId: Types.ObjectId): Promise<Task[]>{
-    return await this.taskModel.find({ user: userId });
+
+    const tasksFromCache: Task[] = await this.cacheManager.get(`tasks-${userId}`);
+
+    if(tasksFromCache) return tasksFromCache;
+
+    const tasks = await this.taskModel.find({ user: userId });
+    await this.cacheManager.set(`tasks-${userId}`, tasks);
+    
+    return tasks;
   }
 
   async findOne(taskId: Types.ObjectId, userId: Types.ObjectId): Promise<Task> {
@@ -77,6 +96,7 @@ export class TasksService {
 
 
     const task = await this.taskModel.findById({ _id: taskId, user: userId });
+    await this.cacheManager.del(`tasks-${userId}`);
 
     return task;
   }
@@ -92,6 +112,7 @@ export class TasksService {
 
     const task = await this.taskModel.findByIdAndDelete({ _id: taskId, user: userId });
     await this.userService.removeTask(userId, taskId);
+    await this.cacheManager.del(`tasks-${userId}`);
     return task;
   }
 

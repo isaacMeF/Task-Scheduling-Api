@@ -8,6 +8,9 @@ import { TasksModule } from './tasks/tasks.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { ScheduleModule } from '@nestjs/schedule';
+import { CacheModule } from '@nestjs/cache-manager';
+import type { RedisClientOptions } from 'redis';
+import * as redisStore from 'cache-manager-redis-store';
 
 @Module({
     imports: [
@@ -36,6 +39,15 @@ import { ScheduleModule } from '@nestjs/schedule';
         },
       }),
       ScheduleModule.forRoot(),
+
+      CacheModule.register<RedisClientOptions>({
+        isGlobal: true,
+        store: require('cache-manager-redis-store').redisStore,
+        socket: {
+          host: process.env.REDIS_HOST,
+          port: parseInt(process.env.REDIS_PORT),
+        },
+      }),
       
       UserModule,
       TasksModule
