@@ -10,7 +10,6 @@ import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CacheModule } from '@nestjs/cache-manager';
 import type { RedisClientOptions } from 'redis';
-import * as redisStore from 'cache-manager-redis-store';
 
 @Module({
     imports: [
@@ -47,8 +46,9 @@ import * as redisStore from 'cache-manager-redis-store';
           host: process.env.REDIS_HOST,
           port: parseInt(process.env.REDIS_PORT),
         },
+        password: process.env.REDIS_PASSWORD 
       }),
-      
+
       UserModule,
       TasksModule
     ],
